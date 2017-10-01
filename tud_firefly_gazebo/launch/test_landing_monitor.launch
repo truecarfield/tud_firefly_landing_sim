@@ -1,0 +1,5 @@
+<launch>
+  <node name="firefly_state_monitor" pkg="tud_firefly_landing_sim" type="landing_monitor_node" output="screen">
+    <rosparam command="load" file="$(find tud_firefly_landing_sim)/params/applications/landing_monitor.yaml" />
+  </node>
+</launch>

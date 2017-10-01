@@ -1,0 +1,248 @@
+<launch>
+
+  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+
+  <!-- <env name="GAZEBO_MODEL_PATH" value="${GAZEBO_MODEL_PATH}:$(find tud_firefly_landing_sim)/models"/>
+  <env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find tud_firefly_landing_sim)/models"/> -->
+
+  <!-- We resume the logic in empty_world.launch -->
+  <include file="$(find tud_firefly_gazebo)/launch/spawn_world.launch">
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+  <!-- Creating a aruco_board -->
+  <!--<group ns="aruco_board">
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find tud_firefly_description)/urdf/aruco_board.xacro'" />
+    <node name="aruco_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          args="-x  3.0
+                -y  0.0
+                -z  0.0
+                -urdf
+                -model aruco_board
+                -param robot_description" />
+    <node name="board_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="board_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  </group> -->
+
+  <!-- Creating a whycon_board -->
+  <!--<group ns="whycon_board">
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find tud_firefly_description)/urdf/whycon_board.xacro'" />
+    <node name="whycon_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          args="-x  4.0
+                -y  0.0
+                -z  0.0
+                -urdf
+                -model aruco_board
+                -param robot_description" />
+    <node name="board_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="board_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  </group> -->
+
+  <!-- Creating the differential wheeled UGV in Gazebo -->
+  <group ns="UGV">
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find tud_firefly_description)/urdf/diff_wheeled_UGV.xacro'" />
+    <node name="UGV_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+	        args="-x  1.0
+                -y  -3.0
+                -z  0.0
+                -Y  1.57
+                -urdf
+                -model diff_wheeled_UGV
+                -param robot_description" />
+    <node name="UGV_robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="UGV_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  </group>
+
+  <!-- Creating the asctec firefly UAV in Gazebo -->
+  <group ns="firefly">
+    <!-- Send the robot XML to param server -->
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find tud_firefly_description)/urdf/firefly_for_landing.gazebo'
+                                             enable_logging:=true
+                                             enable_ground_truth:=true
+                                             enable_mavlink_interface:=false
+                                             log_file:=firefly
+                                             wait_to_record_bag:=false
+                                             mav_name:=firefly
+                                             namespace:=firefly" />
+
+    <!-- Push robot_description to factory and spawn robot in gazebo -->
+    <node name="spawn_firefly" pkg="gazebo_ros" type="spawn_model"
+          args="-param robot_description
+                -urdf
+                -x 0.0
+                -y 0.0
+                -z 0.0
+                -model firefly"
+       respawn="false" output="screen">
+    </node>
+
+    <node name="UAV_robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="UAV_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  </group>
+
+  <!-- Twist controller -->
+  <!-- <node name="firefly_twist_controller_node" pkg="tud_firefly_control" type="firefly_twist_controller_node" output="screen">
+    <rosparam command="load" file="$(find tud_firefly_control)/params/firefly_twist_controller.yaml" />
+    <rosparam command="load" file="$(find rotors_gazebo)/resource/firefly.yaml" />
+    <remap from="motor_status" to="firefly/motor_status" />
+    <remap from="odometry" to="firefly/ground_truth/odometry/" />
+    <remap from="cmd_vel" to="firefly/cmd_vel" />
+  </node> -->
+
+  <!-- Attitude controller -->
+  <!-- <node name="firefly_attitude_controller_node" pkg="tud_firefly_control" type="firefly_attitude_controller_node" output="screen">
+    <rosparam command="load" file="$(find tud_firefly_control)/params/firefly_attitude_controller.yaml" />
+    <rosparam command="load" file="$(find rotors_gazebo)/resource/firefly.yaml" />
+    <remap from="motor_status" to="firefly/motor_status" />
+    <remap from="odometry" to="odometry/filtered" />
+    <remap from="cmd" to="firefly/cmd" />
+  </node> -->
+
+  <!-- Position controller -->
+  <node name="firefly_landing_controller_node" pkg="tud_firefly_control" type="firefly_landing_controller_node" output="screen">
+    <rosparam command="load" file="$(find tud_firefly_control)/params/landing_controller.yaml" />
+    <rosparam command="load" file="$(find rotors_gazebo)/resource/firefly.yaml" />
+    <remap from="odometry" to="firefly/ground_truth/odometry" />
+    <remap from="command/trajectory" to="firefly/command/trajectory" />
+    <remap from="command/motor_speed" to="firefly/command/motor_speed" />
+    <remap from="R_des" to="firefly/R_des" />
+    <remap from="cmd_velocity" to="firefly/cmd_velocity" />
+    <remap from="angular_rate_des" to="firefly/angular_rate_des" />
+  </node> -->
+
+  <!-- Landing state machine -->
+  <node name="firefly_landing_state_machine" pkg="tud_firefly_application" type="landing_state_machine_node" output="screen">
+    <rosparam command="load" file="$(find tud_firefly_application)/params/landing_state_machine.yaml" />
+    <remap from="cmd_position" to="firefly/cmd_position" />
+    <remap from="cmd_velocity" to="firefly/cmd_velocity" />
+    <remap from="cmd_yaw" to="firefly/cmd_yaw" />
+    <remap from="predict_reporter" to="firefly/predict_reporter" />
+  </node>
+
+  <!-- <node name="hovering_example" pkg="rotors_gazebo" type="hovering_example" output="screen">
+    <remap from="command/trajectory" to="firefly/command/trajectory" />
+  </node> -->
+
+  <!-- Joystick interface node -->
+  <arg name="joy_dev" default="/dev/input/js4" />
+  <node name="joy" pkg="joy" type="joy_node" output="screen" >
+    <param name="dev" value="$(arg joy_dev)" />
+  </node>
+  <!-- Note that axis IDs are those from the joystick message plus one, to be able to invert axes by specifiying either positive or negative axis numbers.-->
+  <!-- Axis 2 from joy message thus has to be set as '3' or '-3'(inverted mode) below-->
+  <node name="joy_controller_node" pkg="tud_firefly_control" type="joy_controller_node" output="screen" >
+    <!-- <param name="x_axis" value="5"/>
+    <param name="y_axis" value="4"/>
+    <param name="z_axis" value="2"/>
+    <param name="yaw_axis" value="1"/> -->
+    <param name="x_velocity_max" value="1" />
+    <param name="y_velocity_max" value="1" />
+    <param name="z_velocity_max" value="1" />
+    <param name="yaw_rate_max" value="0.2" />
+    <param name="control_mode" value="twist"/>
+    <param name="x_axis" value="2"/>
+    <param name="y_axis" value="1"/>
+    <param name="z_axis" value="4"/>
+    <param name="yaw_axis" value="3"/>
+    <param name="motor_status" value="9"/>
+    <param name="landing_activation" value="10"/>
+    <param name="test_activation" value="2"/>
+    <remap from="firefly/cmd_vel" to="cmd_vel" /> -->
+  </node>
+
+  <!-- Image processor based on ar_sys -->
+  <!-- <node pkg="ar_sys" type="single_board" name="ar_sys_image_processor" output="screen"> -->
+  <node name="firefly_image_processor" pkg="tud_firefly_application" type="ar_sys_single_board_mod_node" output="screen">
+    <remap from="/camera_info" to="firefly/camera_1_sensor/camera_info" />
+    <remap from="/image" to="firefly/camera_1_sensor/image_raw" />
+    <param name="image_is_rectified" type="bool" value="true" />
+    <param name="board_config" type="string" value="$(find tud_firefly_application)/params/marker_config/aruco_marker_76.yml"/>
+    <!--<param name="board_config" type="string" value="$(find tud_firefly_application)/params/marker_config/4_aruco_marker.yml"/> -->
+    <param name="board_frame" type="string" value="board76" />
+    <!--aruco marker 76 car: 0.3330 [m], in about 3.47 [m] available;
+        4 aruco marker car: 0.1710 [m], in about 1.78 [m] available;
+        single board:0,83 [m]; 4_aruco:0.43 [m] -->
+    <param name="draw_markers" type="bool" value="true" />
+    <param name="marker_size" type="double" value="0.3330" />
+    <param name="draw_markers_cube" type="bool" value="false" />
+    <param name="draw_markers_axis" type="bool" value="false" />
+    <param name="publish_tf" value="true" />
+  </node>
+
+  <!-- Image processor based on Whycon -->
+  <!-- whycon 似乎image_transport这个库的subscribeCamera函数不会订阅camera_info，而是直接通过image的topic来寻找同名的camera_info，
+       所以这里<remap from="/camera_info" to="/firefly/camera_1_sensor/camera_info" />是没有用的 -->
+  <!--   <node ns="firefly/camera_1_sensor" pkg="image_proc" type="image_proc" name="image_proc_1" >
+    <remap from="/image_raw" to="/firefly/camera_1_sensor/image_raw" />
+    <remap from="/camera_info" to="/firefly/camera_1_sensor/camera_info" />
+  </node>
+  <node pkg="whycon" type="set_axis" name="set_axis" output="screen" >
+    <remap from="/camera/image_rect_color" to="/firefly/camera_1_sensor/image_rect_color" />
+    <remap from="/camera/camera_info" to="/firefly/camera_1_sensor/camera_info" />
+    <param name="xscale" value="1.0" />
+    <param name="yscale" value="1.0" />
+  </node>
+  <node pkg="whycon" type="whycon" name="whycon" output="screen">
+    <remap from="/camera/image_rect_color" to="/firefly/camera_1_sensor/image_rect_color" />
+    <remap from="/camera/camera_info" to="/firefly/camera_1_sensor/camera_info" />
+    <param name="world_frame" value="firefly/camera_1_optical_frame"/>
+    <param name="targets" value="3" />
+    <param name="max_refine" value="5"/>
+    <param name="max_attempts" value="5"/>
+    <param name="outer_diameter" value="0.314" />
+    <param name="inner_diameter" value="0.128" />
+    <param name="name" value="whycon" />
+  </node>
+  <node name="robot_pose_publisher" type="robot_pose_publisher" pkg="whycon" /> -->
+
+  <!-- Image view programm that show the image result from ar_sys/Whycon -->
+  <node name="image_view_camera_1" pkg="image_view" type="image_view" output="screen">
+    <remap from="image" to="firefly_image_processor/result" />
+    <!-- <remap from="image" to="whycon/image_out" /> -->
+    <param name="autosize" type="bool" value="true" />
+  </node>
+
+  <!-- landing state estimator -->
+  <!-- <node name="firefly_complementary_filter" pkg="tud_firefly_state_estimation" type="complementary_filter_node" clear_params="true" output="screen">
+    <rosparam command="load" file="$(find tud_firefly_state_estimation)/params/complementary_filter.yaml" />
+  </node> -->
+
+  <node name="firefly_mahony_complementary_filter" pkg="tud_firefly_state_estimation" type="mahony_complementary_filter_node" clear_params="true" output="screen">
+    <rosparam command="load" file="$(find tud_firefly_state_estimation)/params/mahony_complementary_filter.yaml" />
+  </node>
+
+  <node name="firefly_ekf_landing" pkg="tud_firefly_state_estimation" type="firefly_state_estimation_node" clear_params="true">
+    <rosparam command="load" file="$(find tud_firefly_state_estimation)/params/firefly_ekf_landing.yaml" />
+    <rosparam command="load" file="$(find rotors_gazebo)/resource/firefly.yaml" />
+    <remap from="odometry/filtered" to="firefly/odometry/filtered"/> -->
+    <remap from="accel/filtered" to="firefly/accel/filtered"/> -->
+  </node>
+
+  <!-- landing state estimator -->
+  <!-- <node name="firefly_ekf_landing" pkg="robot_localization" type="ekf_localization_node" clear_params="true" output="screen">
+    <rosparam command="load" file="$(find robot_localization)/params/ekf_template.yaml" />
+    <rosparam command="load" file="$(find rotors_gazebo)/resource/firefly.yaml" />
+      Placeholder for output topic remapping
+      <remap from="odometry/filtered" to=""/>
+      <remap from="accel/filtered" to=""/>
+  </node> -->
+
+  <!-- State monitor to send state estimation result to tf so that it is available in rviz -->
+  <node name="firefly_state_monitor" pkg="tud_firefly_application" type="landing_monitor_node" output="screen">
+    <rosparam command="load" file="$(find tud_firefly_application)/params/landing_monitor.yaml" />
+    <remap from="odometry/filtered" to="firefly/odometry/filtered" />
+  </node> -->
+
+  <!-- Start rviz visualization with preset config -->
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find tud_firefly_gazebo)/rviz_cfg/tud_firefly_landing_sim.rviz"/>
+
+</launch>

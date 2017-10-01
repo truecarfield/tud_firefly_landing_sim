@@ -1,0 +1,414 @@
+Panels:
+  - Class: rviz/Displays
+    Help Height: 78
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /Status1
+        - /RobotModel1
+        - /RobotModel2
+        - /TF1
+        - /TF1/Frames1
+        - /Camera1
+        - /RobotModel3
+      Splitter Ratio: 0.555233
+    Tree Height: 736
+  - Class: rviz/Selection
+    Name: Selection
+  - Class: rviz/Tool Properties
+    Expanded:
+      - /2D Pose Estimate1
+      - /2D Nav Goal1
+      - /Publish Point1
+    Name: Tool Properties
+    Splitter Ratio: 0.588679
+  - Class: rviz/Views
+    Expanded:
+      - /Current View1
+    Name: Views
+    Splitter Ratio: 0.5
+  - Class: rviz/Time
+    Experimental: false
+    Name: Time
+    SyncMode: 0
+    SyncSource: Camera
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz/Grid
+      Color: 160; 160; 164
+      Enabled: true
+      Line Style:
+        Line Width: 0.03
+        Value: Lines
+      Name: Grid
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 10
+      Reference Frame: <Fixed Frame>
+      Value: true
+    - Alpha: 1
+      Class: rviz/RobotModel
+      Collision Enabled: false
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+        caster_wheel:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        chassis:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        footprint:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_wheel:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        marker:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_wheel:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+      Name: RobotModel
+      Robot Description: UGV/robot_description
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
+    - Alpha: 1
+      Class: rviz/RobotModel
+      Collision Enabled: false
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+        firefly/base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        firefly/base_link_inertia:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        firefly/camera_1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        firefly/camera_1_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        firefly/gps_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        firefly/imu_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        firefly/imugt_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        firefly/magnetometer_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        firefly/odometry_sensor1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        firefly/odometry_sensorgt_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        firefly/ray_range_finder_1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        firefly/ray_range_finder_1_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        firefly/rotor_0:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        firefly/rotor_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        firefly/rotor_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        firefly/rotor_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        firefly/rotor_4:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        firefly/rotor_5:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        firefly/update_event_publisher_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+      Name: RobotModel
+      Robot Description: firefly/robot_description
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+        caster_wheel:
+          Value: false
+        chassis:
+          Value: true
+        firefly/base_link:
+          Value: true
+        firefly/base_link_inertia:
+          Value: false
+        firefly/camera_1_link:
+          Value: false
+        firefly/camera_1_optical_frame:
+          Value: false
+        firefly/gps_link:
+          Value: false
+        firefly/imu_link:
+          Value: false
+        firefly/imugt_link:
+          Value: false
+        firefly/magnetometer_link:
+          Value: false
+        firefly/odometry_sensor1:
+          Value: false
+        firefly/odometry_sensor1_link:
+          Value: false
+        firefly/odometry_sensorgt_link:
+          Value: false
+        firefly/ray_range_finder_1_link:
+          Value: false
+        firefly/ray_range_finder_1_optical_frame:
+          Value: false
+        firefly/rotor_0:
+          Value: false
+        firefly/rotor_1:
+          Value: false
+        firefly/rotor_2:
+          Value: false
+        firefly/rotor_3:
+          Value: false
+        firefly/rotor_4:
+          Value: false
+        firefly/rotor_5:
+          Value: false
+        firefly/update_event_publisher_link:
+          Value: false
+        footprint:
+          Value: false
+        left_wheel:
+          Value: false
+        marker:
+          Value: true
+        odometry/filtered:
+          Value: false
+        right_wheel:
+          Value: false
+        world:
+          Value: false
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        world:
+          firefly/base_link:
+            firefly/base_link_inertia:
+              {}
+            firefly/camera_1_link:
+              firefly/camera_1_optical_frame:
+                {}
+            firefly/gps_link:
+              {}
+            firefly/imu_link:
+              {}
+            firefly/imugt_link:
+              {}
+            firefly/magnetometer_link:
+              {}
+            firefly/odometry_sensor1_link:
+              {}
+            firefly/odometry_sensorgt_link:
+              {}
+            firefly/ray_range_finder_1_link:
+              firefly/ray_range_finder_1_optical_frame:
+                {}
+            firefly/rotor_0:
+              {}
+            firefly/rotor_1:
+              {}
+            firefly/rotor_2:
+              {}
+            firefly/rotor_3:
+              {}
+            firefly/rotor_4:
+              {}
+            firefly/rotor_5:
+              {}
+            firefly/update_event_publisher_link:
+              {}
+          firefly/odometry_sensor1:
+            {}
+          footprint:
+            chassis:
+              caster_wheel:
+                {}
+              left_wheel:
+                {}
+              marker:
+                {}
+              right_wheel:
+                {}
+          odometry/filtered:
+            {}
+      Update Interval: 0
+      Value: true
+    - Class: rviz/Camera
+      Enabled: true
+      Image Rendering: background and overlay
+      Image Topic: /firefly/camera_1_sensor/image_raw
+      Name: Camera
+      Overlay Alpha: 0.5
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+      Visibility:
+        Grid: true
+        RobotModel: true
+        TF: true
+        Value: true
+      Zoom Factor: 1
+    - Alpha: 1
+      Class: rviz/RobotModel
+      Collision Enabled: false
+      Enabled: false
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+      Name: RobotModel
+      Robot Description: aruco_board/robot_description
+      TF Prefix: ""
+      Update Interval: 0
+      Value: false
+      Visual Enabled: true
+  Enabled: true
+  Global Options:
+    Background Color: 48; 48; 48
+    Fixed Frame: world
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz/Interact
+      Hide Inactive Objects: true
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+    - Class: rviz/FocusCamera
+    - Class: rviz/Measure
+    - Class: rviz/SetInitialPose
+      Topic: /initialpose
+    - Class: rviz/SetGoal
+      Topic: /move_base_simple/goal
+    - Class: rviz/PublishPoint
+      Single click: true
+      Topic: /clicked_point
+  Value: true
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 5.12615
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.06
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
+      Focal Point:
+        X: 0.317667
+        Y: 0.823814
+        Z: 1.05936
+      Name: Current View
+      Near Clip Distance: 0.01
+      Pitch: 0.2298
+      Target Frame: <Fixed Frame>
+      Value: Orbit (rviz)
+      Yaw: 2.34857
+    Saved: ~
+Window Geometry:
+  Camera:
+    collapsed: false
+  Displays:
+    collapsed: false
+  Height: 1017
+  Hide Left Dock: false
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd00000004000000000000016a0000036ffc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006400fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c00610079007301000000280000036f000000dd00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f0000036ffc0200000004fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000c00430061006d0065007200610100000028000000df0000001600fffffffb0000000a00560069006500770073010000010d0000028a000000b000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000007390000003efc0100000002fb0000000800540069006d0065010000000000000739000002f600fffffffb0000000800540069006d00650100000000000004500000000000000000000004b40000036f00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Selection:
+    collapsed: false
+  Time:
+    collapsed: false
+  Tool Properties:
+    collapsed: false
+  Views:
+    collapsed: false
+  Width: 1849
+  X: 159
+  Y: 25
