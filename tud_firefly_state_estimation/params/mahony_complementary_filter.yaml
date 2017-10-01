@@ -1,0 +1,17 @@
+use_mag: true
+
+mag_sub_topic: firefly/magnetic_field
+imu_sub_topic: firefly/imu
+mahony_pub_topic: firefly/mahony_complementary/imu
+
+# Params for Mahony complementary filter
+k: [100.0, 10.0, 100.0, 10.0] # kp1, ki1, kp2, ki2
+
+tau_gyr: [0.01, 0.01, 0.01]
+tau_accel: [0.01, 0.01, 0.01]
+tau_mag: [0.01, 0.01, 0.01]
+
+# 0: PT1, 1: PT2, 2: Pass, 3: Prevent
+tau_gyr_config: [0, 0, 0]
+tau_accel_config: [0, 0, 0]
+tau_mag_config: [0, 0, 0]

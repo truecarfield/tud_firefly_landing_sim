@@ -1,0 +1,15 @@
+
+mag_sub_topic: firefly/magnetic_field
+imu_sub_topic: firefly/imu
+imu_pub_topic: firefly/complementary/imu
+mahony_pub_topic: firefly/mahony_complementary/imu
+
+# Params for simplified complementary filter
+beta: [0.98, 0.98, 1.0]
+
+tau_gyr: [1e-6, 1e-6, 1e-6]
+tau_accel: [1e-6, 1e-6, 1e-6]
+
+# 0: PT1, 1: PT2, 2: Pass, 3: Prevent
+tau_gyr_config: [2, 2, 2]
+tau_accel_config: [2, 2, 2]

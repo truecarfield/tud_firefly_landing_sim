@@ -1,0 +1,83 @@
+cmake_minimum_required(VERSION 2.8.3)
+project(tud_firefly_gazebo_plugins)
+
+find_package(catkin REQUIRED COMPONENTS
+  cmake_modules
+  gazebo
+  gazebo_ros
+  geometry_msgs
+  mav_msgs
+  nav_msgs
+  roscpp
+  rospy
+  rotors_gazebo_plugins
+  sensor_msgs
+  std_msgs
+  std_srvs
+  cv_bridge
+  tf
+)
+
+find_package(Eigen REQUIRED)
+find_package(OpenCV REQUIRED)
+find_package(gazebo REQUIRED)
+
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
+  ${Eigen_INCLUDE_DIRS}
+  ${GAZEBO_INCLUDE_DIRS}
+)
+
+catkin_package(
+  INCLUDE_DIRS 
+    include 
+    #${Eigen_INCLUDE_DIRS}
+  LIBRARIES
+    rotors_gazebo_controller_interface_mod
+    rotors_gazebo_motor_model_mod 
+    rotors_gazebo_update_signal_plugin
+    rotors_gazebo_sonar_plugin
+    rotors_gazebo_imu_mod_plugin
+    rotors_gazebo_odometry_mod_plugin
+  CATKIN_DEPENDS 
+    geometry_msgs 
+    mav_msgs 
+    nav_msgs 
+    roscpp 
+    sensor_msgs 
+    rotors_gazebo_plugins 
+    cv_bridge 
+    tf
+  DEPENDS Eigen opencv gazebo
+)
+
+add_library(rotors_gazebo_controller_interface_mod src/gazebo_controller_interface_mod.cpp)
+target_link_libraries(rotors_gazebo_controller_interface_mod ${catkin_LIBRARIES})
+add_dependencies(rotors_gazebo_controller_interface_mod ${catkin_EXPORTED_TARGETS})
+
+add_library(rotors_gazebo_motor_model_mod src/gazebo_motor_model_mod.cpp)
+target_link_libraries(rotors_gazebo_motor_model_mod ${catkin_LIBRARIES})
+add_dependencies(rotors_gazebo_motor_model_mod ${catkin_EXPORTED_TARGETS})
+
+add_library(rotors_gazebo_bag_mod_plugin src/gazebo_bag_mod_plugin.cpp)
+target_link_libraries(rotors_gazebo_bag_mod_plugin ${catkin_LIBRARIES})
+add_dependencies(rotors_gazebo_bag_mod_plugin ${catkin_EXPORTED_TARGETS})
+
+add_library(rotors_gazebo_update_signal_plugin src/gazebo_update_signal_plugin.cpp)
+target_link_libraries(rotors_gazebo_update_signal_plugin ${catkin_LIBRARIES})
+add_dependencies(rotors_gazebo_update_signal_plugin ${catkin_EXPORTED_TARGETS})
+
+add_library(rotors_gazebo_sonar_plugin  src/gazebo_sonar_plugin.cpp)
+target_link_libraries(rotors_gazebo_sonar_plugin ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES})
+add_dependencies(rotors_gazebo_sonar_plugin ${catkin_EXPORTED_TARGETS})
+
+add_library(rotors_gazebo_imu_mod_plugin src/gazebo_imu_mod_plugin.cpp)
+target_link_libraries(rotors_gazebo_imu_mod_plugin ${catkin_LIBRARIES})
+add_dependencies(rotors_gazebo_imu_mod_plugin ${catkin_EXPORTED_TARGETS})
+
+add_library(rotors_gazebo_odometry_mod_plugin src/gazebo_odometry_mod_plugin.cpp)
+target_link_libraries(rotors_gazebo_odometry_mod_plugin ${catkin_LIBRARIES})
+add_dependencies(rotors_gazebo_odometry_mod_plugin ${catkin_EXPORTED_TARGETS})
+
+
