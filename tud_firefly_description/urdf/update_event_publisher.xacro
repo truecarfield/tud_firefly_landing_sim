@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="update_event_publisher_plugin_macro"
+    params="namespace parent_link *origin">
+    <!-- IMU link -->
+    <link name="${namespace}/update_event_publisher_link">
+    </link>
+    <!-- IMU joint -->
+    <joint name="${namespace}/update_event_publisher_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="${parent_link}" />
+      <child link="${namespace}/update_event_publisher_link" />
+    </joint>
+    <gazebo>
+      <plugin filename="librotors_gazebo_update_signal_plugin.so" name="update_signal_plugin">
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+
+</robot>

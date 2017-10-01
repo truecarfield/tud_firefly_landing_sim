@@ -1,0 +1,66 @@
+# Parameters string
+tar_frame_id: target_UGV
+UAV_frame_id: firefly/base_link
+
+# Parameters bool
+auto_navigation: false
+pub_target_tf: true
+blind_track: false
+predator_prey_scenario: false
+
+# Parameters double
+approaching_height: 1.0 [m]
+landing_initial_height: 2.8  # [m]
+time_target_totally_lost: 5.0 # [s]
+yaw_weight: 1.0 # [m]
+#odometry_callback_timeout: 0.1 # [s]
+#vision_callback_timeout: 0.1 # [s]
+
+# Subscribers
+clock_topic: clock
+command_twist_topic: firefly/cmd_vel
+motor_topic: firefly/motor_status
+land_active_topic: firefly/landing_activation
+#odom_topic: firefly/odometry/filtered
+odom_topic: firefly/ground_truth/odometry
+tar_odom_topic: firefly/UGV_odometry
+rough_tar_odom_topic: firefly/UGV_odometry
+tar_2_cam_topic: firefly_image_processor/transform
+marker_topic: firefly_image_processor/marker_detected
+
+# Publishers
+traj_error_point_topic: firefly/traj_error_point
+traj_error_topic: firefly/traj_error
+
+vertical_curve_factor: 1.5
+curve_factor: 0.5
+
+# Differential trackers
+dim_vision_tracker: 3
+pub_vision_tracker: false
+tau_vision_tracker: [0.05, 0.05, 0.05]
+tau_vision_tracker_config: [0, 0, 0]
+
+dim_cmd_position: 3
+pub_cmd_position: true
+tau_cmd_position: [0.03, 0.03, 0.03] 
+tau_cmd_position_config: [1, 1, 2]
+
+dim_cmd_velocity: 3
+pub_cmd_velocity: true
+tau_cmd_velocity: [0.03, 0.03, 0.03]
+tau_cmd_velocity_config: [1, 1, 2]
+
+dim_cmd_yaw: 9
+pub_cmd_yaw: true
+tau_cmd_yaw: [0.5, 0.5, 0.5,  
+              0.5, 0.5, 0.5, 
+              0.5, 0.5, 0.5]
+tau_cmd_yaw_config: [1, 1, 1,
+                     1, 1, 1,
+                     1, 1, 1]
+
+dim_predict_reporter: 2
+pub_predict_reporter: true
+tau_predict_reporter: [0.1, 0.1]
+tau_predict_reporter_config: [2, 2]

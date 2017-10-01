@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2015 Fadri Furrer, ASL, ETH Zurich, Switzerland
+  Copyright 2015 Michael Burri, ASL, ETH Zurich, Switzerland
+  Copyright 2015 Mina Kamel, ASL, ETH Zurich, Switzerland
+  Copyright 2015 Janosch Nikolic, ASL, ETH Zurich, Switzerland
+  Copyright 2015 Markus Achtelik, ASL, ETH Zurich, Switzerland
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<robot name="$(arg mav_name)" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+  <!-- Instantiate the mav with default imu -->
+  <xacro:include filename="$(find tud_firefly_description)/urdf/$(arg mav_name)_base_mod.xacro" />
+  <!-- Include the xacro files of mono camera -->
+  <xacro:include filename="$(find tud_firefly_description)/urdf/generic_camera.xacro" />
+  <!-- Include the xacro files of ray range finder -->
+  <xacro:include filename="$(find tud_firefly_description)/urdf/ray_sensor.xacro" />
+  <!-- Include the xacro files of update event publisher -->
+  <xacro:include filename="$(find tud_firefly_description)/urdf/update_event_publisher.xacro" />
+
+  <!-- ADIS16448 IMU. -->
+  <xacro:imu_mod_plugin_macro
+    namespace="${namespace}"
+    imu_suffix=""
+    parent_link="${namespace}/base_link"
+    imu_topic="imu"
+    mass_imu_sensor="0.015"
+    gyroscope_noise_density="0.0003394"
+    gyroscopoe_random_walk="0.000038785"
+    gyroscope_bias_correlation_time="1000.0"
+    gyroscope_turn_on_bias_sigma="0.0087"
+    accelerometer_noise_density="0.004"
+    accelerometer_random_walk="0.006"
+    accelerometer_bias_correlation_time="300.0"
+    accelerometer_turn_on_bias_sigma="0.0">
+    <inertia ixx="0.00001" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.00001" />
+    <!-- gyroscope_noise_density="0.0003394"
+         gyroscope_turn_on_bias_sigma="0.0087"
+         accelerometer_noise_density="0.004"
+         accelerometer_turn_on_bias_sigma="0.1960" -->
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:imu_mod_plugin_macro>
+
+  <!-- Ray range finder -->
+  <xacro:ray_sensor_macro
+    namespace="${namespace}"
+    name="ray_range_finder_1"
+    parent="base_link"
+    ray_topic="ray"
+    update_rate="40">
+    <origin xyz="0.1 -0.02 0.0" rpy="1.57 1.57 0.0" />
+  </xacro:ray_sensor_macro>
+
+  <!-- ADIS16448 Magnetometer. -->
+  <xacro:magnetometer_plugin_macro
+    namespace="${namespace}"
+    magnetometer_suffix=""
+    parent_link="${namespace}/base_link"
+    magnetometer_topic="magnetic_field"
+    mass_magnetometer_sensor="0.015"
+    ref_mag_north="0.000021493"
+    ref_mag_east="0.000000000"
+    ref_mag_down="0.000042795"
+    noise_normal="0.000000080 0.000000080 0.000000080"
+    noise_uniform_initial_bias="0.000000400 0.000000400 0.000000400">
+    <inertia ixx="0.00001" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.00001" />
+    <!--  ref_mag_north="0.000021493"
+          ref_mag_east="0.000000815"
+          ref_mag_down="0.000042795"
+          noise_normal="0.000000080 0.000000080 0.000000080"
+          noise_uniform_initial_bias="0.000000400 0.000000400 0.000000400" -->
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:magnetometer_plugin_macro>
+
+  <!-- Mono camera -->
+  <xacro:generic_camera_macro
+    namespace="${namespace}"
+    name="camera_1"
+    parent="base_link"
+    ros_topic="image_raw"
+    cam_info_topic="camera_info"
+    update_rate="30"
+    image_format="R8G8B8"
+    res_x="2048"
+    res_y="2048"
+    hfov="1.57">  <!-- 90° -->
+    <!--res_x="1988"
+    res_y="964"
+    hfov="100"
+    res_x="2048"
+    res_y="1536"
+    hfov="2.09">  120°
+    hfov="1.047">  60° -->
+    <origin xyz="0.1 0.02 0.0" rpy="1.57 1.57 0.0" />
+  </xacro:generic_camera_macro>
+
+  <!-- Default GPS. -->
+  <xacro:gps_plugin_macro
+    namespace="${namespace}"
+    gps_suffix=""
+    parent_link="${namespace}/base_link"
+    gps_topic="gps"
+    ground_speed_topic="ground_speed"
+    mass_gps_sensor="0.015"
+    horizontal_pos_std_dev="3.0"
+    vertical_pos_std_dev="6.0"
+    horizontal_vel_std_dev="0.1"
+    vertical_vel_std_dev="0.1">
+    <inertia ixx="0.00001" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.00001" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:gps_plugin_macro>
+
+  <xacro:update_event_publisher_plugin_macro
+    namespace="${namespace}"
+    parent_link="${namespace}/base_link">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </xacro:update_event_publisher_plugin_macro>
+
+  <xacro:odometry_mod_plugin_macro
+    namespace="${namespace}"
+    odometry_sensor_suffix="1"
+    parent_link="${namespace}/base_link"
+    pose_topic="odometry_sensor1/pose"
+    pose_with_covariance_topic="odometry_sensor1/pose_with_covariance"
+    position_topic="odometry_sensor1/position"
+    transform_topic="odometry_sensor1/transform"
+    odometry_topic="odometry_sensor1/odometry"
+    world_frame_id="world"
+    odometry_frame_id="world"
+    parent_frame_id="world"
+    child_frame_id="${namespace}/odometry_sensor1"
+    mass_odometry_sensor="0.00001"
+    measurement_divisor="1"
+    measurement_delay="0.0"
+    unknown_delay="0.0"
+    noise_normal_position="0.0 0.0 0.0"
+    noise_normal_quaternion="0.0 0.0 0.0"
+    noise_normal_linear_velocity="0 0 0"
+    noise_normal_angular_velocity="0 0 0"
+    noise_uniform_position="3 3 3"
+    noise_uniform_quaternion="0 0 0"
+    noise_uniform_linear_velocity="0 0 0"
+    noise_uniform_angular_velocity="0 0 0"
+    enable_odometry_map="false"
+    odometry_map=""
+    image_scale="">
+    <inertia ixx="0.00001" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.00001" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </xacro:odometry_mod_plugin_macro>
+</robot>

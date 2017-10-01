@@ -1,0 +1,221 @@
+<?xml version="1.0"?>
+<robot name="diff_wheeled_UGV" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:property name="PI" value="3.1415926535897931"/>
+  <xacro:property name="chassisHeight" value="0.1"/>
+  <xacro:property name="chassisLength" value="0.5"/>
+  <xacro:property name="chassisWidth" value="0.45"/>
+  <xacro:property name="chassisMass" value="10"/>
+  <xacro:property name="casterRadius" value="0.05"/>
+  <xacro:property name="casterMass" value="5"/>
+  <xacro:property name="wheelWidth" value="0.05"/>
+  <xacro:property name="wheelRadius" value="0.1"/>
+  <xacro:property name="wheelPos" value="0.1"/>
+  <xacro:property name="wheelMass" value="1"/>
+  <xacro:property name="cameraSize" value="0.05"/>
+  <xacro:property name="cameraMass" value="0.1"/>
+
+  <macro name="cylinder_inertia" params="m r h">
+    <inertia  ixx="${m*(3*r*r+h*h)/12}" ixy = "0" ixz = "0"
+              iyy="${m*(3*r*r+h*h)/12}" iyz = "0"
+              izz="${m*r*r/2}" />
+  </macro>
+
+  <macro name="box_inertia" params="m x y z">
+    <inertia  ixx="${m*(y*y+z*z)/12}" ixy = "0" ixz = "0"
+              iyy="${m*(x*x+z*z)/12}" iyz = "0"
+              izz="${m*(x*x+z*z)/12}" />
+  </macro>
+
+  <macro name="sphere_inertia" params="m r">
+    <inertia  ixx="${2*m*r*r/5}" ixy = "0" ixz = "0"
+              iyy="${2*m*r*r/5}" iyz = "0"
+              izz="${2*m*r*r/5}" />
+  </macro>
+
+  <macro name="wheel" params="lr tY">
+
+    <joint name="${lr}_wheel_hinge" type="continuous">
+      <parent link="chassis"/>
+      <child link="${lr}_wheel"/>
+      <origin xyz="${-wheelPos+chassisLength/2} ${tY*wheelWidth/2+tY*chassisWidth/2} ${wheelRadius}" rpy="0 0 0" />
+      <axis xyz="0 1 0" rpy="0 0 0" />
+      <limit effort="100" velocity="100"/>
+      <joint_properties damping="0.0" friction="0.0"/>
+    </joint>
+
+    <link name="${lr}_wheel">
+      <collision>
+        <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI/2}" />
+        <geometry>
+          <cylinder length="${wheelWidth}" radius="${wheelRadius}"/>
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI/2}" />
+        <geometry>
+          <cylinder length="${wheelWidth}" radius="${wheelRadius}"/>
+        </geometry>
+      </visual>
+
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI/2}" />
+        <mass value="${wheelMass}"/>
+        <cylinder_inertia m="${wheelMass}" r="${wheelRadius}" h="${wheelWidth}"/>
+      </inertial>
+    </link>
+
+    <gazebo reference="${lr}_wheel">
+      <!--<mu1 value="1.0"/>
+      <mu2 value="1.0"/>
+      <kp  value="10000000.0" />
+      <kd  value="1.0" />
+      <fdir1 value="1 0 0"/> -->
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <transmission name="${lr}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${lr}_wheel_hinge"><hardwareInterface>EffortJointInterface</hardwareInterface></joint>
+      <actuator name="front_${lr}_wheel_joint_motor">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+  </macro>
+
+  <link name="footprint" />
+
+  <joint name="base_joint" type="fixed">
+    <parent link="footprint"/>
+    <child link="chassis"/>
+  </joint>
+
+  <link name='chassis'>
+    <collision>
+      <origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${chassisLength} ${chassisWidth} ${chassisHeight}"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${chassisLength} ${chassisWidth} ${chassisHeight}"/>
+        </geometry>
+    </visual>
+    <inertial>
+      <origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/>
+      <mass value="${chassisMass}"/>
+      <box_inertia m="${chassisMass}" x="${chassisLength}" y="${chassisWidth}" z="${chassisHeight}"/>
+    </inertial>
+  </link>
+  <gazebo reference="chassis">
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+  <joint name="marker_joint" type="fixed">
+    <origin xyz="0 0 ${wheelRadius+chassisHeight*0.51}" rpy="0 0 0"/>
+    <parent link="chassis"/>
+    <child link="marker"/>
+  </joint>
+
+  <link name="marker">
+  <!--  <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.000000"/>
+      <box_inertia m="0.01" x="0.01" y="0.01" z="0.01"/>
+    </inertial>
+    <collision name='collision'>
+      <geometry>
+        <box size="${chassisLength} ${chassisWidth} 0.01"/>
+      </geometry>
+      <max_contacts>10</max_contacts>
+      <surface>
+        <bounce/>
+        <friction>
+          <ode/>
+        </friction>
+        <contact>
+          <ode/>
+        </contact>
+      </surface>
+    </collision>
+    -->
+    <visual name="visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <!-- <mesh filename="package://tud_firefly_description/meshes/markers/4_aruco.dae" scale="0.4 0.4 0.4" /> -->
+        <mesh filename="package://tud_firefly_description/meshes/markers/aruco_76.dae" scale="0.4 0.4 0.4" />
+      </geometry>
+    </visual>
+    <!-- <velocity_decay>
+      <linear>0.000000</linear>
+      <angular>0.000000</angular>
+    </velocity_decay>
+    <self_collide>0</self_collide>
+    <kinematic>0</kinematic>
+    <gravity>0</gravity> -->
+  </link>
+
+  <joint name="fixed" type="fixed">
+    <parent link="chassis"/>
+    <child link="caster_wheel"/>
+  </joint>
+
+  <link name="caster_wheel">
+    <collision>
+      <origin xyz="${casterRadius-chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="${casterRadius}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="${casterRadius-chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="${casterRadius}"/>
+      </geometry>
+    </visual>
+
+    <inertial>
+      <origin xyz="${casterRadius-chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
+      <mass value="${casterMass}"/>
+      <sphere_inertia m="${casterMass}" r="${casterRadius}"/>
+    </inertial>
+  </link>
+  <gazebo reference="caster_wheel">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <wheel lr="left" tY="-1"/>
+  <wheel lr="right" tY="1"/>
+
+  <gazebo>
+    <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+      <rosDebugLevel>Debug</rosDebugLevel>
+      <publishWheelTF>false</publishWheelTF>
+      <robotNamespace>/</robotNamespace>
+      <publishTf>1</publishTf>
+      <publishWheelJointState>false</publishWheelJointState>
+      <alwaysOn>true</alwaysOn>
+      <updateRate>100</updateRate>
+      <leftJoint>left_wheel_hinge</leftJoint>
+      <rightJoint>right_wheel_hinge</rightJoint>
+      <wheelSeparation>${chassisWidth+wheelWidth}</wheelSeparation>
+      <wheelDiameter>${2*wheelRadius}</wheelDiameter>
+      <broadcastTF>1</broadcastTF>
+      <wheelTorque>30</wheelTorque>
+      <wheelAcceleration>1.8</wheelAcceleration>
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>/firefly/UGV_odometry</odometryTopic>
+      <odometryFrame>world</odometryFrame>
+      <robotBaseFrame>footprint</robotBaseFrame>
+    </plugin>
+  </gazebo>
+
+</robot>

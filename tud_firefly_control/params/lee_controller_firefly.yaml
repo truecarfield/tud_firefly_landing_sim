@@ -1,0 +1,41 @@
+# Lee position controller parameters
+
+# Original position controllers
+position_gain: {x: 6, y: 6, z: 10}
+velocity_gain: {x: 4.7, y: 4.7, z: 5.0}
+position_integral_gain: {x: 0.0, y: 0.0, z: 0.0}
+
+# pid position and twist controlllers
+linear/z: {k_p: 5.0, k_i: 1.0, k_d: 0.05}
+linear/yaw: {k_p: 10.0, k_i: 1.0, k_d: 1.0}
+linear/Vz:  {k_p: 5.0, k_i: 1.0, k_d: 0.05}
+angular/r:  {k_p: 10.0, k_i: 1.0, k_d: 1.0}
+
+#attitude_gain: {x: 5, y: 5, z: 0.15}
+#attitude_integral_gain: {x: 6.0, y: 6.0, z: 3.0}
+#angular_rate_gain: {x: 0.68, y: 0.68, z: 0.18}
+
+attitude_gain: {x: 5, y: 5, z: 10}
+attitude_integral_gain: {x: 0.0, y: 0.0, z: 7.0}
+angular_rate_gain: {x: 0.68, y: 0.68, z: 7.18}
+
+# Differential trackers
+dim_R_des: 3
+pub_R_des: true
+tau_R_des: [0.01, 0.01, 0.01]
+tau_R_des_config: [0, 0, 0]
+
+dim_angular_rate_des: 3
+pub_angular_rate_des: false
+tau_angular_rate_des: [0.01, 0.01, 0.01]
+tau_angular_rate_des_config: [0, 0, 0]
+
+dim_cmd_velocity: 3
+tau_cmd_velocity: [0.01, 0.01, 0.01]
+tau_cmd_velocity_config: [0, 0, 0]
+pub_cmd_velocity: false
+
+dim_cmd_position: 3
+tau_cmd_position: [0.01, 0.01, 0.01]
+tau_cmd_position_config: [0, 0, 0]
+pub_cmd_position: true

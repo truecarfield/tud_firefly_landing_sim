@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+
+  <xacro:macro name="ray_sensor_macro" params="namespace name parent *origin ray_topic update_rate">
+    <joint name="${namespace}/${name}_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${namespace}/${parent}"/>
+      <child link="${namespace}/${name}_link"/>
+    </joint>
+
+    <link name="${namespace}/${name}_link">
+      <inertial>
+        <mass value="0.001" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 ${-M_PI/2} 0" />
+        <geometry>
+          <cylinder length="0.02" radius="0.01" />
+        </geometry>
+        <material name="Green">
+          <color rgba="0.0 0.0 0.8 1"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 ${-M_PI/2} 0" />
+        <geometry>
+          <cylinder length="0.02" radius="0.01" />
+        </geometry>
+      </collision>
+    </link>
+    <gazebo reference="${namespace}/${name}_link">
+      <material>Gazebo/Green</material>
+    </gazebo>
+
+    <joint name="${namespace}/${name}_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0.0 ${-M_PI/2}" />
+      <parent link="${namespace}/${name}_link" />
+      <child link="${namespace}/${name}_optical_frame"/>
+    </joint>
+
+    <link name="${namespace}/${name}_optical_frame"/>
+
+    <gazebo reference="${namespace}/${name}_link">
+      <sensor type="ray" name="{name}_sensor">
+        <pose>0 0 0 0 0 0</pose>
+        <visualize>true</visualize>
+        <update_rate>${update_rate}</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>1</samples>
+              <resolution>1</resolution>
+              <!-- <min_angle>-1.570796</min_angle>
+              <max_angle>1.570796</max_angle> -->
+              <min_angle>-0.01</min_angle>
+              <max_angle>0.01</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.10</min>
+            <max>30.0</max>
+            <resolution>1</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise parameters based on published spec for Hokuyo laser
+                 achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
+                 stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+                 reading. -->
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+        <visualize>true</visualize>
+
+        <plugin name="gazebo_sonar_sensor_controller" filename="librotors_gazebo_sonar_plugin.so">
+          <robotNamespace>${namespace}</robotNamespace>
+          <topicName>${ray_topic}</topicName>
+          <frameId>${namespace}/${name}_link</frameId>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+</robot>
