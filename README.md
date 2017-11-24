@@ -11,28 +11,17 @@ The pdf version of the tutorial of tud_firefly_landing_sim is available in
 tud_firefly_landing_sim_tutorial.pdf
 
 Overall there are seven subpackages in this metapackage:
-1. tud_firefly_landing_sim: This package plays the role of package list of a metapackage, in the
- package.xml file of this package all subpackages are listed in the run_depend list;
+1. tud_firefly_landing_sim: This package plays the role of package list of a metapackage, in the package.xml file of this package all subpackages are listed in the run_depend list;
 
-2. tud_firefly_description: This package contains the customerized marker mesh files and the URDF
- scripts of the AscTec firefly UAV as well as the UGV that to be landed;
+2. tud_firefly_description: This package contains the customerized marker mesh files and the URDF scripts of the AscTec firefly UAV as well as the UGV that to be landed; 
 
-3. tud_firefly_gazebo_plugins: This package contains source files of the gazebo plugins from the
- UAV model such as actuator controller, sensors like IMU and camera;
+3. tud_firefly_gazebo_plugins: This package contains source files of the gazebo plugins from the UAV model such as actuator controller, sensors like IMU and camera; 
 
-4. tud_firefly_state_estimation: This package contains the data fusion system of the UAV. Firstly
- an EKF algorithm developed based on the package robot_localization. Moreover, another algorithm called mahony-complementary-filter is developed in order to estimate the UAV attitude
-directly from IMU measurements, the final fused UAV states will be published to the topic
- /odometry/filtered
- ;
+4. tud_firefly_state_estimation: This package contains the data fusion system of the UAV. Firstly an EKF algorithm developed based on the package robot_localization. Moreover, another algorithm called mahony-complementary-filter is developed in order to estimate the UAV attitude 
+directly from IMU measurements, the final fused UAV states will be published to the topic /odometry/filtered ;
 
-5. tud_firefly_control: This package contains the source code of UAV control algorithms such as
- attitude controller, twist controller, landing controller etc.;
+5. tud_firefly_control: This package contains the source code of UAV control algorithms such as attitude controller, twist controller, landing controller etc.; 
 
-6. tud_firefly_application: This package contains the source code of several subsystems that contribute to the UAV autonomous landing simulation, such as the marker detection system based on ar_sys. And a landing state machine has been developed in order to define the landing process
- according to current measurements;
+6. tud_firefly_application: This package contains the source code of several subsystems that contribute to the UAV autonomous landing simulation, such as the marker detection system based on ar_sys. And a landing state machine has been developed in order to define the landing process according to current measurements;
 
 7. tud_firefly_gazebo: This package contains the launch files of the UAV autonomous landing simulation.
-
-
-
