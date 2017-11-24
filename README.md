@@ -1,4 +1,4 @@
-tud_firefly_landing_sim is a ROS package based on rotors_simulato. In the package, series of control and state estimation methods has been designed or integrated to simulate the process of autonomous landing control of a hexacopter UAV (Unmanned Aerial Vehicle) AscTec firefly on top of a mobile UGV (Unmanned Ground Vehicle) using onboard vision. The package is created modularly as a metapackage so that other ones could also test their own algorithms using this package.
+tud_firefly_landing_sim is a ROS package mainly based on rotors_simulaton. In the package, series of control and state estimation methods has been designed or integrated to simulate the process of autonomous landing control of a hexacopter UAV (Unmanned Aerial Vehicle) AscTec firefly on top of a mobile UGV (Unmanned Ground Vehicle) using onboard vision. The package is created modularly as a metapackage so that other ones could also test their own algorithms using this package.
 
 In order to compile this package correctly, several other packages are required:
 
