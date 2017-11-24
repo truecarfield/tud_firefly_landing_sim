@@ -11,7 +11,7 @@ https://github.com/ethz-asl/rotors_simulator
 robot_localization: 
 http://wiki.ros.org/robot_localization
 
-joystick_drivers(no dependence, only used with launch scripts): 
+joystick_drivers(no dependency, only used with launch scripts): 
 http://wiki.ros.org/joystick_drivers
 
 
